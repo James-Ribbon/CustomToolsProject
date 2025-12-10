@@ -15,6 +15,7 @@ namespace jamesribbon.EditorTools
             bool isConfirmed = EditorUtility.DisplayDialog(
                 "Create Default Project Folders",
                 "Are you sure you want to create the default project folders? Only use this for new projects",
+
                 "Yes",
                 "No"
             );
@@ -23,16 +24,38 @@ namespace jamesribbon.EditorTools
             {
                 string defaultPath = "_Project";
 
-                CreateFolders(defaultPath + "/Audio", "SoundEffects", "Music");
-                CreateFolders(defaultPath + "/Content", "Characters", "Environment", "UI");
-                CreateFolders(defaultPath + "/Prefabs", "Characters", "Environment", "UI");
-                CreateFolders(defaultPath + "/Scenes", "Core", "Levels", "Menus", "Testing");
-                CreateFolders(defaultPath + "/Scripts", "Audio", "Gameplay", "Content", "UI");
+                CreateDirectory(Combine(dataPath, defaultPath));
+
+                //General Folders
+                CreateFolders(defaultPath + "/Settings");
+                CreateFolders(defaultPath + "/Documentation");
+                CreateFolders(defaultPath + "/ThirdParty");
+
+                //Art structure
+                CreateFolders(defaultPath + "/Art/3D", "Models", "Materials", "Textures", "Animations");
+                CreateFolders(defaultPath + "/Art/UI", "Sprites", "Fonts", "Icons");
+
+                //Audio Structure
+                CreateFolders(defaultPath + "/Audio", "Music", "SFX", "Voice");
+
+                //Scripts structure
+                CreateFolders(defaultPath + "/Scripts", "Core", "Player", "Enemies", "UI", "Systems", "Utilities");
+
+                //Scenes structure
+                CreateFolders(defaultPath + "/Scenes", "Levels", "Menu", "Testing");
+
+                //Prefabs structure
+                CreateFolders(defaultPath + "/Prefabs", "Characters", "Props", "Environment", "UI");
+
+                //Unique Unity folders (outside _Project)
+                CreateFolders(dataPath + "/Resources");
+                CreateFolders(dataPath + "/StreamingAssets");
+                CreateFolders(dataPath + "/Plugins");
 
                 Refresh();
-            }
 
-            
+                Debug.Log("Default project folders created successfully!");
+            }            
         }
 
         private static void CreateFolders(string root, params string[] dir)
@@ -43,6 +66,14 @@ namespace jamesribbon.EditorTools
             {
                 CreateDirectory(Combine(fullpath, newDirectory));
             }
+        }
+
+        private static void CreateFolders(string path)
+        {
+            var fullpath = Combine(dataPath, path);
+           
+            CreateDirectory(fullpath);
+            
         }
     }
 }
